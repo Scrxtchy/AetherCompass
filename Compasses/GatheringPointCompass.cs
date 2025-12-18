@@ -5,7 +5,7 @@ using AetherCompass.Compasses.Configs;
 using AetherCompass.Compasses.Objectives;
 using AetherCompass.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel;
 
 namespace AetherCompass.Compasses;

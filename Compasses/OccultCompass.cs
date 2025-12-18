@@ -2,36 +2,37 @@ using AetherCompass.Common;
 using AetherCompass.Common.Attributes;
 using AetherCompass.Compasses.Objectives;
 using AetherCompass.Game;
+using AetherCompass.UI.Gui;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using Dalamud.Bindings.ImGui;
 
 namespace AetherCompass.Compasses;
 
 [CompassType(CompassType.Standard)]
-public class EurekanCompass : Compass
+public class OccultCompass : Compass
 {
-	public override string CompassName => "Eureka Elemental Compass";
-	public override string Description => "Detecting nearby Eureka Elementals. (By apetih.)";
+	public override string CompassName => "Occult Crescent Compass";
+	public override string Description => "Occult Crescent Compass";
 
 	protected override CompassConfig CompassConfig => Plugin.Config.EurekanConfig;
 
 	private static System.Numerics.Vector4 infoTextColour = new(.8f, .95f, .75f, 1);
 	private const float infoTextShadowLightness = .1f;
 
-	private const uint elementalMarkerIconId = 15835;
-
 	private static readonly System.Numerics.Vector2 elementalMarkerIconSize = new(25, 25);
 
 	public override bool IsEnabledInCurrentTerritory() =>
-		ZoneWatcher.CurrentTerritoryType?.TerritoryIntendedUse.ValueNullable?.RowId == 41;
+		ZoneWatcher.CurrentTerritoryType?.TerritoryIntendedUse.ValueNullable?.RowId == 61;
 
 	protected override string GetClosestObjectiveDescription(CachedCompassObjective objective) =>
 		objective.Name;
 
 	public override unsafe bool IsObjective(GameObject* o) =>
 		o != null
-		&& (o->ObjectKind == ObjectKind.BattleNpc)
-		&& IsEurekanElementalName(CompassUtil.GetName(o));
+		&& ((o->ObjectKind == ObjectKind.Treasure)
+		&& CompassUtil.GetName(o) == "Treasure Coffer")
+		|| ((o->ObjectKind == ObjectKind.EventNpc)
+		&& CompassUtil.GetName(o) == "Destination");
 
 	public override DrawAction? CreateDrawDetailsAction(CachedCompassObjective objective)
 	{
@@ -59,14 +60,13 @@ public class EurekanCompass : Compass
 			return null;
 		return GenerateDefaultScreenMarkerDrawAction(
 			objective,
-			elementalMarkerIconId,
-			new(24, 32),
+			IconManager.DefaultMarkerIconId,
+			DefaultMarkerIconSize,
 			.9f,
 			$"{objective.Name}, {CompassUtil.DistanceToDescriptiveString(objective.Distance3D, true)}",
 			infoTextColour,
 			infoTextShadowLightness,
-			out _,
-			important: objective.Distance3D < 60
+			out _
 		);
 	}
 
@@ -75,21 +75,6 @@ public class EurekanCompass : Compass
 		if (name == null)
 			return false;
 		name = name.ToLower();
-		return name == "hydatos elemental"
-			|| name == "pyros elemental"
-			|| name == "pagos elemental"
-			|| name == "anemos elemental"
-			|| name == "ヒュダトス・エレメンタル"
-			|| name == "パゴス・エレメンタル"
-			|| name == "ピューロス・エレメンタル"
-			|| name == "アネモス・エレメンタル"
-			|| name == "élémentaire hydatos"
-			|| name == "élémentaire pyros"
-			|| name == "élémentaire pagos"
-			|| name == "élémentaire anemos"
-			|| name == "hydatos-elementar"
-			|| name == "pyros-elementar"
-			|| name == "pagos-elementar"
-			|| name == "anemos-elementar";
+		return name == "Treasure Coffer";
 	}
 }

@@ -1,6 +1,6 @@
 using AetherCompass.Common;
 using Dalamud.Interface.Utility;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace AetherCompass.UI.Gui;
 

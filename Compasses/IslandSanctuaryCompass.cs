@@ -5,7 +5,7 @@ using AetherCompass.Compasses.Objectives;
 using AetherCompass.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel;
 
 namespace AetherCompass.Compasses;
@@ -48,7 +48,7 @@ public class IslandSanctuaryCompass : Compass
 	{
 		if (o == null)
 			return false;
-		if (IslandConfig.DetectGathering && o->ObjectKind == ObjectKind.MjiObject)
+		if (IslandConfig.DetectGathering && o->ObjectKind == ObjectKind.ReactionEventObject)
 			return islandGatherDict.TryGetValue(o->GetNameId(), out var data)
 				&& (IslandConfig.GatheringObjectsToShow & (1u << (int)data.SheetRowId)) != 0;
 		if (IslandConfig.DetectAnimals && o->ObjectKind == ObjectKind.BattleNpc)
@@ -63,7 +63,7 @@ public class IslandSanctuaryCompass : Compass
 			return new IslandCachedCompassObjective(obj, 0);
 		return obj->ObjectKind switch
 		{
-			ObjectKind.MjiObject => new(obj, IslandObjectType.Gathering),
+			ObjectKind.ReactionEventObject => new(obj, IslandObjectType.Gathering),
 			ObjectKind.BattleNpc => new(obj, IslandObjectType.Animal),
 			_ => new IslandCachedCompassObjective(obj, 0),
 		};
@@ -78,7 +78,7 @@ public class IslandSanctuaryCompass : Compass
 	//    if (obj == null) return new IslandCachedCompassObjective(obj, 0);
 	//    return obj->ObjectKind switch
 	//    {
-	//        (byte)ObjectKind.MjiObject =>
+	//        (byte)ObjectKind.ReactionEventObject =>
 	//            new IslandCachedCompassObjective(info, IslandObjectType.Gathering),
 	//        (byte)ObjectKind.BattleNpc =>
 	//            new IslandCachedCompassObjective(info, IslandObjectType.Animal),
@@ -166,7 +166,7 @@ public class IslandSanctuaryCompass : Compass
 		ImGui.Checkbox("Detect Gathering Objects", ref IslandConfig.DetectGathering);
 		if (IslandConfig.DetectGathering)
 		{
-			ImGui.TreePush();
+			ImGui.TreePush("");
 			ImGui.Checkbox(
 				"Show gathering object names on the markers",
 				ref IslandConfig.ShowNameOnMarkerGathering
@@ -221,7 +221,7 @@ public class IslandSanctuaryCompass : Compass
 			);
 			if (ImGui.CollapsingHeader("Detect only the following animals ..."))
 			{
-				ImGui.TreePush();
+				ImGui.TreePush("");
 				if (ImGui.Button("Select all"))
 					IslandConfig.AnimalsToShow = uint.MaxValue;
 				ImGui.SameLine();
@@ -252,7 +252,7 @@ public class IslandSanctuaryCompass : Compass
 						ImGui.BeginGroup();
 						if (icon != null)
 							ImGui.Image(
-								icon.GetWrapOrEmpty().ImGuiHandle,
+								icon.GetWrapOrEmpty().Handle,
 								animalSpecificMarkerIconSize
 							);
 						else
@@ -268,7 +268,7 @@ public class IslandSanctuaryCompass : Compass
 						{
 							ImGui.BeginTooltip();
 							ImGui.Image(
-								icon.GetWrapOrEmpty().ImGuiHandle,
+								icon.GetWrapOrEmpty().Handle,
 								animalSpecificMarkerIconSize * 1.5f
 							);
 							ImGui.EndTooltip();

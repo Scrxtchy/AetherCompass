@@ -2,7 +2,7 @@ using System.Numerics;
 using AetherCompass.Common;
 using AetherCompass.Game.SeFunctions;
 using Dalamud.Interface.Utility;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace AetherCompass.UI.Gui;
 
@@ -132,11 +132,14 @@ public static class UiHelper
 
 	public static Vector4 GenerateShadowColour(Vector4 colour, float lightness)
 	{
-		ImGui.ColorConvertRGBtoHSV(colour.X, colour.Y, colour.Z, out var h, out var _, out var _);
+		// TODO:  ColorConvertRGBtoHSV does not correct return out
+		//maybe it will be noticed
+		return new Vector4(0, 0, 0, colour.W);
+		/*ImGui.ColorConvertRGBtoHSV(colour.X, colour.Y, colour.Z, out var h, out var _, out var _);
 		var s = -lightness * lightness + 1;
 		var v = lightness;
 		ImGui.ColorConvertHSVtoRGB(h, s, v, out var r, out var g, out var b);
-		return new(r, g, b, colour.W);
+		return new(r, g, b, colour.W);*/
 	}
 
 	public static Vector2 GetTextSize(string text, ImFontPtr font, float fontsize)

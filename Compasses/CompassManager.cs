@@ -3,7 +3,7 @@ using AetherCompass.Common.Attributes;
 using AetherCompass.Game;
 using AetherCompass.UI;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ObjectInfo = FFXIVClientStructs.FFXIV.Client.UI.UI3DModule.ObjectInfo;
 
 namespace AetherCompass.Compasses;

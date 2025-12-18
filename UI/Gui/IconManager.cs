@@ -41,7 +41,7 @@ public sealed class IconManager : IDisposable
 		iconMap[DirectionScreenIndicatorIconId];
 	public static readonly Vector2 DirectionScreenIndicatorIconSize = new(45, 45);
 	public static readonly uint DirectionScreenIndicatorIconColour =
-		ImGuiNET.ImGui.ColorConvertFloat4ToU32(new(1, 1, 0, 1));
+		Dalamud.Bindings.ImGui.ImGui.ColorConvertFloat4ToU32(new(1, 1, 0, 1));
 
 	public static readonly Vector2 MarkerIconSize = new(30, 30);
 

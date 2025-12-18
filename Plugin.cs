@@ -11,6 +11,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 
 namespace AetherCompass;
 
@@ -37,6 +38,9 @@ public class Plugin : IDalamudPlugin
 
 	[PluginService]
 	internal static IClientState ClientState { get; private set; } = null!;
+
+	[PluginService]
+	internal static IPlayerState PlayerState { get; private set; } = null!;
 
 	[PluginService]
 	internal static ICondition ClientCondition { get; private set; } = null!;
@@ -112,7 +116,7 @@ public class Plugin : IDalamudPlugin
 
 	private void OnDrawUi()
 	{
-		if (ClientState.LocalContentId == 0)
+		if (PlayerState.ContentId == 0)
 			return;
 
 		if (InConfig)
@@ -120,7 +124,7 @@ public class Plugin : IDalamudPlugin
 
 		if (Enabled && ZoneWatcher.IsInCompassWorkZone && !InNotDrawingConditions())
 		{
-			if (ClientState.LocalPlayer != null)
+			if (PlayerState.ContentId != null)
 			{
 				try
 				{
@@ -171,7 +175,7 @@ public class Plugin : IDalamudPlugin
 
 	private void OnFrameworkUpdate(IFramework framework)
 	{
-		if (Enabled && ClientState.LocalContentId != 0 && ZoneWatcher.IsInCompassWorkZone)
+		if (Enabled && PlayerState.ContentId != 0 && ZoneWatcher.IsInCompassWorkZone)
 		{
 			try
 			{
@@ -193,7 +197,7 @@ public class Plugin : IDalamudPlugin
 		if (terr == 0)
 			return;
 		// Local player is almost always null when this event fired
-		if (Enabled && ClientState.LocalContentId != 0)
+		if (Enabled && PlayerState.ContentId != 0)
 			CompassManager.OnZoneChange();
 	}
 
@@ -216,10 +220,10 @@ public class Plugin : IDalamudPlugin
 		|| Config.HideWhenCraftGather
 			&& (
 				ClientCondition[ConditionFlag.Crafting]
-				|| ClientCondition[ConditionFlag.Crafting40]
+				|| ClientCondition[ConditionFlag.ExecutingCraftingAction]
 				|| ClientCondition[ConditionFlag.Fishing]
 				|| ClientCondition[ConditionFlag.Gathering]
-				|| ClientCondition[ConditionFlag.Gathering42]
+				|| ClientCondition[ConditionFlag.ExecutingGatheringAction]
 				|| ClientCondition[ConditionFlag.PreparingToCraft]
 			);
 

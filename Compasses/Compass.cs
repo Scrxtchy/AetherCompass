@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AetherCompass.Common;
@@ -9,7 +10,7 @@ using AetherCompass.UI;
 using AetherCompass.UI.Gui;
 using Dalamud.Interface.Textures;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using ObjectInfo = FFXIVClientStructs.FFXIV.Client.UI.UI3DModule.ObjectInfo;
 
 namespace AetherCompass.Compasses;
@@ -290,12 +291,21 @@ public abstract class Compass
 				}
 				if (NotifyToast)
 				{
-					var msg =
+
+					if (GetClosestObjectiveDescription(closestObj).Contains("Rank: A"))
+					{
+						var msg = $"You sense your Elite Mark to the {Regex.Replace(closestObj.CompassDirectionFromPlayer.ToString(), "(?<!^)([A-Z])", " $1")}";
+						Notifier.TryNotifyByToast(msg);
+					}
+					else
+					{
+						var msg =
 						$"Found {GetClosestObjectiveDescription(closestObj)} "
 						+ $"on {closestObj.CompassDirectionFromPlayer}, "
 						+ $"{CompassUtil.DistanceToDescriptiveString(closestObj.Distance3D, true)} from you, "
 						+ $"at {CompassUtil.MapCoordToFormattedString(closestObj.CurrentMapCoord)}";
-					Notifier.TryNotifyByToast(msg);
+						Notifier.TryNotifyByToast(msg);
+					}
 				}
 				closestObjPtrSecondLast = closestObjPtrLast;
 				closestObjPtrLast = closestObj.GameObject;
@@ -589,7 +599,7 @@ public abstract class Compass
 					ImGui
 						.GetWindowDrawList()
 						.AddImageQuad(
-							icon.GetWrapOrEmpty().ImGuiHandle,
+							icon.GetWrapOrEmpty().Handle,
 							p1,
 							p2,
 							p3,
@@ -622,7 +632,7 @@ public abstract class Compass
 					ImGui
 						.GetWindowDrawList()
 						.AddImage(
-							icon.GetWrapOrEmpty().ImGuiHandle,
+							icon.GetWrapOrEmpty().Handle,
 							iconDrawPos,
 							iconDrawPos + iconSize,
 							new(0, 0),
@@ -654,7 +664,7 @@ public abstract class Compass
 				ImGui
 					.GetWindowDrawList()
 					.AddImage(
-						icon.GetWrapOrEmpty().ImGuiHandle,
+						icon.GetWrapOrEmpty().Handle,
 						screenPosRaw - iconHalfSize,
 						screenPosRaw + iconHalfSize,
 						new(0, 0),

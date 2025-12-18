@@ -9,10 +9,7 @@ namespace AetherCompass.Game;
 
 internal static unsafe class GameObjects
 {
-	private static readonly UI3DModule* UI3DModule = (
-		(UIModule*)Plugin.GameGui.GetUIModule()
-	)->GetUI3DModule();
-
+	private static readonly UI3DModule* UI3DModule = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance()->UIModule->GetUI3DModule();
 	// Those that would be rendered on screen
 	internal static ObjectInfo** SortedObjectInfoPointerArray =>
 		UI3DModule != null

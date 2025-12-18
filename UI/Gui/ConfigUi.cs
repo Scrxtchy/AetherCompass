@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Numerics;
 using AetherCompass.Compasses;
 using AetherCompass.Game;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace AetherCompass.UI.Gui;
 
@@ -111,7 +111,7 @@ public static class ConfigUi
 		);
 		if (Plugin.Config.ShowScreenMark)
 		{
-			ImGui.TreePush();
+			ImGui.TreePush("");
 			ImGuiEx.DragFloat(
 				"Marker size scale",
 				100,
@@ -165,7 +165,7 @@ public static class ConfigUi
 			);
 			if (Plugin.Config.HideScreenMarkIfNameplateInsideDisplayArea)
 			{
-				ImGui.TreePush();
+				ImGui.TreePush("");
 				ImGuiEx.DragInt(
 					"Hide only when object is within",
 					Language.Unit.Yalm,
@@ -192,7 +192,7 @@ public static class ConfigUi
 		);
 		if (Plugin.Config.ShowDetailWindow)
 		{
-			ImGui.TreePush();
+			ImGui.TreePush("");
 			ImGuiEx.Checkbox(
 				"Don't show in instanced contents",
 				ref Plugin.Config.HideDetailInContents,
@@ -227,7 +227,7 @@ public static class ConfigUi
 		);
 		if (Plugin.Config.NotifyChat)
 		{
-			ImGui.TreePush();
+			ImGui.TreePush("");
 			ImGuiEx.Checkbox(
 				"Also enable sound notification",
 				ref Plugin.Config.NotifySe,

@@ -1,7 +1,7 @@
 using AetherCompass.Common;
 using AetherCompass.Compasses;
 using AetherCompass.Game;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 namespace AetherCompass.UI.Gui;
 
