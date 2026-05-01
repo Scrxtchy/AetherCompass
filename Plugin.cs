@@ -191,7 +191,7 @@ public class Plugin : IDalamudPlugin
 
 	private void OnOpenConfigUi() => OpenConfig(true);
 
-	private void OnZoneChange(ushort terr)
+	private void OnZoneChange(uint terr)
 	{
 		ZoneWatcher.OnZoneChange();
 		if (terr == 0)
